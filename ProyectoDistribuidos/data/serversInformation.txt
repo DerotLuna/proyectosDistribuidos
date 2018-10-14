@@ -1,0 +1,3 @@
+1,ServerE,localhost,9000,1
+2,Replica1,localhost,9001,0
+3,Replica2,localhost,9002,0

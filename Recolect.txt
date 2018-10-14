@@ -1,0 +1,177 @@
+Recolect
+Server:
+
+		/*	System.out.println("Port server please...");
+	        BufferedReader inputUser = new BufferedReader(new InputStreamReader(System.in)); //Leer comandos del cliente
+	        String key = inputUser.readLine();
+	        myPort = Integer.parseInt(key);
+
+	        System.out.println("Port next server please...");
+	        inputUser = new BufferedReader(new InputStreamReader(System.in)); //Leer comandos del cliente
+	        key = inputUser.readLine();
+	        nextPort = Integer.parseInt(key);*/
+
+
+
+
+			/*
+		   	if (start = 0){
+		   		Socket socket = new Socket("localhost", myPort);
+		   		/* Socket clientSocket = serverSocket.accept();
+		   		new ThreadedServer(clientSocket, myPort, nextPort).start();
+		   		BufferedReader inputServer = new BufferedReader( new InputStreamReader(clientSocket.getInputStream())); //Catch next server             
+                PrintStream outputServer = new PrintStream(clientSocket.getOutputStream()); //Send msg to next server 
+
+                for (int couter = 1 ; ;) {
+					Socket clientSocket = serverSocket.accept();
+		   			new ThreadedServer(clientSocket, myPort, nextPort).start();
+		   			BufferedReader inputServer = new BufferedReader( new InputStreamReader(clientSocket.getInputStream())); //Catch next server             
+                	PrintStream outputServer = new PrintStream(clientSocket.getOutputStream()); //Send msg to next server
+                	if (inputServer.readLine() == "I'm here!") outputServer.println(transport);
+		    	}
+		   	}*/
+
+private synchronized void create_Traffic_Light(){
+        try{
+            File archive = new File (DIR + "packagesInProcess.txt");
+            FileWriter fr = new FileWriter (archive);
+            PrintWriter pw = new PrintWriter(fr);
+            pw.print("1\n" + myProcess);
+            fr.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private synchronized void updatePackagesInProcess(){
+        try{
+            File archive = new File (DIR + "packagesInProcess.txt");
+            FileWriter fr = new FileWriter (archive);
+            PrintWriter pw = new PrintWriter(fr);
+            pw.print("0\n" + myProcess);
+            fr.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private synchronized void packagesInProcess(int type, String idTransport){
+        try{
+            int print = 0;
+            while (true){
+                File archive = new File (DIR + "packagesInProcess.txt");
+                FileReader fr = new FileReader (archive);
+                BufferedReader br = new BufferedReader(fr);
+
+                boolean init = false; String line = ""; int trafficLight = 0;
+                while((line = br.readLine())!=null){
+
+                    try{trafficLight = Integer.parseInt(line);}
+                    catch(Exception e){System.out.print("");} 
+
+                    if (init) {
+                        if (type == 0) {
+                            myProcess = Integer.parseInt(line) + 1;
+                            if (myProcess == 4) {
+                                if (print == 0) System.out.println("Transport " + idTransport +" wait for download package"); 
+                                init = false;
+                                print = 1;
+                                break;
+                            }
+                            else{
+                                System.out.println("Transport " + idTransport + " process is: " + myProcess);
+                                break;
+                            }
+                        }
+                        else if(type == 1){
+                            System.out.println("Transport " + idTransport + " finish download " + Integer.parseInt(line));
+                            myProcess = Integer.parseInt(line) - 1;
+                            break;
+                        }
+                    }
+
+                    if (trafficLight == 1) break;
+                    else if (trafficLight == 0) {init = true; }
+                }
+                fr.close();
+                if (init) {create_Traffic_Light(); break;} 
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*  private synchronized void create_Traffic_Light(){
+        try{
+            File archive = new File (DIR + "sendPackages" + myPort + ".txt");
+            FileWriter fr = new FileWriter (archive);
+            PrintWriter pw = new PrintWriter(fr);
+            pw.print("1\n" + sendPackages);
+            fr.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void load_Transport(){
+        try{
+            while (true){
+                File archive = new File (DIR + "sendPackages" + myPort + ".txt");
+                FileReader fr = new FileReader (archive);
+                BufferedReader br = new BufferedReader(fr);
+
+                boolean init = false; String line = ""; int trafficLight = 0;
+                while((line = br.readLine())!=null){
+
+                    try{trafficLight = Integer.parseInt(line);}
+                    catch(Exception e){System.out.print("");} 
+
+                    if (init) {sendPackages = line;}
+
+                    if (trafficLight == 1) break;
+                    else if (trafficLight == 0) {init = true; }
+                }
+                fr.close();
+                if (init) {create_Traffic_Light(); break;} 
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }  
+
+        String[] packages = sendPackages.split(",");
+        //System.out.println("Load packages to transport " + transport.split(",")[0]);
+
+         
+        
+        int counter = 0;
+        boolean exit = false; String[] transportPats;
+
+        if (sendPackages.equals("")) exit = true;
+        while (!exit){
+            transportPats = transport.split(",");
+            if (transportPats.length == 6) exit = true;
+            else {
+                try{
+                    transport = transport + "," + packages[counter];
+                    System.out.println("Transport " + transport.split(",")[0] +" Load package: " + packages[counter].split(":")[1] + " to port: " + packages[counter].split(":")[0]);
+                    counter++;
+                    try{Thread.sleep(10000);}
+                    catch(Exception e){e.printStackTrace();} 
+                }
+                catch(Exception e){
+                    System.out.println("No packages to send");
+                    System.out.println("Transport: " + transport);
+                    exit = true;
+                }   
+            }
+        }
+        download_Data(counter);
+        System.out.println("Loaded packages... Send transport: " + transport.split(",")[0]);
+        try{Thread.sleep(0000);}
+        catch(Exception e){e.printStackTrace();} 
+    }*/

@@ -1,0 +1,3 @@
+nodo1,localhost,8189,localhost,8190
+nodo2,localhost,8190,localhost,8191
+nodo3,localhost,8191,localhost,8189
